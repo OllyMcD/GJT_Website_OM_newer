@@ -1,0 +1,50 @@
+﻿@page "/"
+
+<MudCarousel Class="mud-width-full" Style="height:100vh; width:100vw;" AutoCycle="false" TData="object">
+    <BulletTemplate Context="selected">
+        <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
+            <span class="mud-icon-button-label">
+                <MudIcon Icon="@(selected ? Icons.Material.Filled.CheckCircle : Icons.Material.Filled.Circle)" Color="@Color.Inherit" />
+            </span>
+        </div>
+    </BulletTemplate>
+    <PreviousButtonTemplate>
+        <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
+            <span class="mud-icon-button-label">
+                <MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipPrevious" Color="@Color.Inherit" />
+            </span>
+        </div>
+    </PreviousButtonTemplate>
+    <NextButtonTemplate>
+        <div Class="mud-button-root mud-icon-button mud-icon-button-color-inherit mud-ripple mud-ripple-icon">
+            <span class="mud-icon-button-label">
+                <MudIcon Class="mud-ripple mud-ripple-icon mud-icon-button-size-medium" Icon="@Icons.Material.Filled.SkipNext" Color="@Color.Inherit" />
+            </span>
+        </div>
+    </NextButtonTemplate>
+    <ChildContent>
+        <!-- Login Page -->
+        <MudCarouselItem Color="@Color.Primary">
+            <div class="d-flex flex-column justify-content-center align-items-center" style="height:100%; width:100%">
+                <MudIcon Class="mb-4" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                <MudButton Variant="Variant.Filled" Color="Color.Primary" Href="/login" Size="Size.Large">
+                    Go to Login
+                </MudButton>
+            </div>
+        </MudCarouselItem>
+
+        <!-- Register Page -->
+        <MudCarouselItem Color="@Color.Secondary">
+            <div class="d-flex flex-column justify-content-center align-items-center" style="height:100%; width:100%">
+                <MudIcon Class="mb-4" Icon="@Icons.Custom.Brands.MudBlazor" Size="@Size.Large" />
+                <MudButton Variant="Variant.Filled" Color="Color.Secondary" Href="/register" Size="Size.Large">
+                    Go to Register
+                </MudButton>
+            </div>
+        </MudCarouselItem>
+    </ChildContent>
+</MudCarousel>
+
+@code {
+
+}

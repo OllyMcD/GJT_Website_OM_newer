@@ -1,0 +1,56 @@
+﻿@using MudBlazor
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6" Color="Color.Primary" Class="d-flex align-items-center">
+            <MudIcon Icon="@Icons.Material.Filled.EmojiEvents" Class="mr-3 mb-n1" Size="Size.Large" />
+            Badge Unlocked!
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudPaper Elevation="5" Class="p-3 rounded" Style="background-color: #F3CA5F; color: #fff;">
+            <MudText Typo="Typo.body1" Class="mb-3">
+                @ContentText
+            </MudText>
+            @if (!string.IsNullOrEmpty(CertificateImageUrl))
+            {
+                <MudImage Src="@CertificateImageUrl" Alt="Badge Image" Width="120" Height="120" Class="rounded-circle" />
+            }
+        </MudPaper>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="CloseDialog" Color="Color.Primary" Variant="Variant.Filled" Class="ml-auto">OK</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter]
+    private IMudDialogInstance MudDialog { get; set; }
+
+    [Parameter]
+    public string ContentText { get; set; } = "Congratulations! You've unlocked a new badge.";
+
+    [Parameter]
+    public string? CertificateImageUrl { get; set; } // Add CertificateImageUrl parameter
+
+    private void CloseDialog() => MudDialog.Close();
+}
+
+<style>
+    
+    .mud-dialog {
+        font-family: 'Arial', sans-serif;
+    }
+
+    .rounded-circle {
+        border-radius: 50%;
+        border: 3px solid #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .mud-button.mud-button-filled {
+        border-radius: 8px;
+        text-transform: none;
+    }
+
+</style>

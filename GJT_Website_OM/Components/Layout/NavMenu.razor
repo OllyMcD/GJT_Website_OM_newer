@@ -1,0 +1,41 @@
+﻿@inject TopicService TopicService
+
+<MudGrid Justify="Justify.Center" AlignItems="AlignItems.Center" Spacing="3">
+    <MudItem>
+        <MudNavLink Href="/Home" Match="NavLinkMatch.All">Dashboard</MudNavLink>
+    </MudItem>
+    <MudItem>
+        <MudNavLink Href="/Tutorials" Match="NavLinkMatch.Prefix">Tutorials</MudNavLink>
+    </MudItem>
+    <MudItem>
+        <MudNavLink Href="/Exercises" Match="NavLinkMatch.Prefix">Exercises</MudNavLink>
+    </MudItem>
+    <MudItem>
+        <MudNavLink Href="/Certificates" Match="NavLinkMatch.Prefix">Certificates</MudNavLink>
+    </MudItem>
+    <MudItem>
+        <MudMenu>
+            <ActivatorContent>
+                <MudNavLink Match="NavLinkMatch.Prefix">Subjects</MudNavLink>
+            </ActivatorContent>
+            <ChildContent>
+                <MudMenuItem Label="Maths" OnClick="@(() => SelectTopic("Maths"))" />
+                <MudMenuItem Label="Physics" OnClick="@(() => SelectTopic("Physics"))" />
+                <MudMenuItem Label="Computing" OnClick="@(()=>SelectTopic("Computing"))" />
+            </ChildContent>
+        </MudMenu>
+    </MudItem>
+    <MudItem>
+        <MudNavLink Href="/Contact" Match="NavLinkMatch.Prefix">Contact Us</MudNavLink>
+    </MudItem>
+    <MudItem>
+        <MudNavLink Href="/Settings" Match="NavLinkMatch.Prefix">Settings</MudNavLink>
+    </MudItem>
+</MudGrid>
+
+@code {
+    private void SelectTopic(string topic)
+    {
+        TopicService.SelectedTopic = topic;
+    }
+}

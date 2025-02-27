@@ -1,0 +1,232 @@
+﻿@page "/Home"
+@inherits LayoutComponentBase
+@using GJT_Website_OM.Services
+@inject LoggedInService LoggedInService
+@inject SubjectService SubjectService
+@inject NavigationManager NavigationManager
+@inject TopicService TopicService
+
+<div style="background-color:#39414d">
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-5 nike-theme">
+        <MudGrid>
+            <!-- Hero Section -->
+            <MudItem xs="12">
+                <MudPaper Class="hero-section pa-4" Elevation="4">
+                    <MudText Typo="Typo.h3" Class="text-center mb-4">Education for the Future</MudText>
+                    <MudText Typo="Typo.subtitle1" Class="text-center mb-4">
+                        Providing children with the skills they need to succeed. Let's build a brighter tomorrow together.
+                    </MudText>
+                    <div class="d-flex justify-center">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Class="mx-2" href="/pricing">
+                            View Pricing
+                        </MudButton>
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" Class="mx-2">
+                            Learn More
+                        </MudButton>
+                    </div>
+                </MudPaper>
+            </MudItem>
+
+            <!-- Subject Drawer Section -->
+            <MudItem xs="12">
+                <MudPaper Height="200px" Style="overflow:hidden; position:relative;">
+                    <MudDrawerContainer Class="mud-height-full">
+                        <MudDrawer @bind-Open="@_open" Fixed="false" Elevation="1" Variant="@DrawerVariant.Mini" OpenMiniOnHover="true">
+                            <MudNavMenu>
+                                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Science" OnClick="@(() => SubjectService.SelectedSubject = "Physics")">Physics</MudNavLink>
+                                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Calculate" OnClick="@(() => SubjectService.SelectedSubject = "Maths")">Maths</MudNavLink>
+                                <MudNavLink Match="NavLinkMatch.All" Icon="@Icons.Material.Filled.Computer" OnClick="@(() => SubjectService.SelectedSubject = "Computing")">Computing</MudNavLink>
+                            </MudNavMenu>
+                        </MudDrawer>
+                        <MudContainer Class="center-content">
+                            @switch (SubjectService.SelectedSubject)
+                            {
+                                case "Physics":
+                                    <MudText Typo="Typo.h5" Align="Align.Center">Physics</MudText>
+                                    <br />
+                                    <MudText Align="Align.Center">Explore motion, energy, and the universe. Learn about forces, mechanics, thermodynamics, and the laws governing everything from atoms to galaxies.</MudText>
+                                    <MudText Align="Align.Center">In this course, you'll dive deep into experiments and problem-solving methods to understand the world around us.</MudText>
+                                    <br />
+                                    <MudContainer Class="d-flex justify-center align-center">
+                                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" Class="mx-2" OnClick="@(() => SelectTopic("Physics"))">
+                                            Go Test Your Skills
+                                        </MudButton>
+                                    </MudContainer>
+                                    break;
+                                case "Maths":
+                                    <MudText Typo="Typo.h5" Align="Align.Center">Maths</MudText>
+                                    <br />
+                                    <MudText Align="Align.Center">Master problem-solving and logical thinking. From algebra to calculus, the subject covers a wide range of concepts that build the foundation for many other fields.</MudText>
+                                    <MudText Align="Align.Center">This exercise page teaches essential techniques in equations, geometry, and mathematical proofs, equipping you with skills that apply in real-world scenarios.</MudText>
+                                    <br />
+                                    <MudContainer Class="d-flex justify-center align-center">
+                                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" Class="mx-2" OnClick="@(() => SelectTopic("Maths"))">
+                                            Go Test Your Skills
+                                        </MudButton>
+                                    </MudContainer>
+                                    break;
+                                case "Computing":
+                                    <MudText Typo="Typo.h5" Align="Align.Center">Computing</MudText>
+                                    <br />
+                                    <MudText Align="Align.Center">Learn coding, AI, and the future of technology. Understand programming languages, algorithms, and how technology shapes the modern world.</MudText>
+                                    <MudText Align="Align.Center">The exercises here guide you through building programs, understanding data structures, and applying coding practices to solve complex problems efficiently.</MudText>
+                                    <br />
+                                    <MudContainer Class="d-flex justify-center align-center">
+                                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Size="Size.Large" Class="mx-2" OnClick="@(() => SelectTopic("Computing"))">
+                                            Go Test Your Skills
+                                        </MudButton>
+                                    </MudContainer>
+
+
+                                    break;
+                                default:
+                                    <MudText Typo="Typo.h5" Align="Align.Center">Select a subject</MudText>
+                                    <br />
+                                    <MudText Align="Align.Center">Click on a subject to see more information and explore what you can learn from each exercise.</MudText>
+                                    break;
+                            }
+                        </MudContainer>
+                    </MudDrawerContainer>
+                </MudPaper>
+            </MudItem>
+
+
+            <!-- Pricing Section -->
+            <MudItem xs="12" class="pricing-section">
+                <MudPaper Class="pa-4" Elevation="2">
+                    <MudText Typo="Typo.h4" Class="text-center mb-4">Affordable Pricing Plans</MudText>
+                    <MudGrid>
+                        <MudItem xs="12" sm="4">
+                            <MudPaper Class="pricing-card pa-4" Elevation="2">
+                                <MudText Typo="Typo.h6" Class="text-center mb-2">Basic Plan</MudText>
+                                <MudText Typo="Typo.body1" Class="text-center mb-4">$19/month</MudText>
+                                <MudText Class="text-center">Access to all basic courses</MudText>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth Class="mt-4" href="/Pricing">
+                                    Sign Up
+                                </MudButton>
+                            </MudPaper>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="4">
+                            <MudPaper Class="pricing-card pa-4" Elevation="2">
+                                <MudText Typo="Typo.h6" Class="text-center mb-2">Premium Plan</MudText>
+                                <MudText Typo="Typo.body1" Class="text-center mb-4">$49/month</MudText>
+                                <MudText Class="text-center">All basic courses + exclusive content and workshops</MudText>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth Class="mt-4" href="/Pricing">
+                                    Sign Up
+                                </MudButton>
+                            </MudPaper>
+                        </MudItem>
+
+                        <MudItem xs="12" sm="4">
+                            <MudPaper Class="pricing-card pa-4" Elevation="2">
+                                <MudText Typo="Typo.h6" Class="text-center mb-2">Ultimate Plan</MudText>
+                                <MudText Typo="Typo.body1" Class="text-center mb-4">$99/month</MudText>
+                                <MudText Class="text-center">Access to all courses + 1-on-1 mentorship</MudText>
+                                <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth Class="mt-4" href="/Pricing">
+                                    Sign Up
+                                </MudButton>
+                            </MudPaper>
+                        </MudItem>
+                    </MudGrid>
+                </MudPaper>
+            </MudItem>
+
+            <br />
+
+            <!-- Call to Action -->
+            <MudItem xs="12">
+                <MudPaper Class="cta-section pa-4" Elevation="4">
+                    <MudText Typo="Typo.h4" Class="text-center mb-4">Ready to Invest in Your Child's Future?</MudText>
+                    <MudText Class="text-center mb-4">
+                        With our interactive and dynamic courses, your child will be ready to face tomorrow’s challenges.
+                    </MudText>
+                    <div style="display: flex; justify-content: center; margin-top: 20px;">
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Href="/Pricing">
+                            Start Today
+                        </MudButton>
+                    </div>
+                </MudPaper>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+</div>
+
+@code
+{
+
+
+
+
+
+
+
+    private bool _open = false;
+    private string? selectedSubject;
+
+
+    private void ToggleDrawer()
+    {
+        _open = !_open;
+    }
+
+    private void SelectTopic(string topic)
+    {
+        TopicService.SelectedTopic = topic;
+
+        Task.Delay(1000);
+
+        NavigationManager.NavigateTo("/Exercises");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        SubjectService.OnSubjectChanged += HandleSubjectChanged;
+        selectedSubject = SubjectService.SelectedSubject ?? "";
+
+        LoggedInService.isLoggedIn = CheckLoginStatus();
+
+        if (!LoggedInService.isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+
+        await Task.CompletedTask;
+    }
+
+    private void HandleSubjectChanged()
+    {
+        selectedSubject = SubjectService.SelectedSubject ?? "";
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        SubjectService.OnSubjectChanged -= HandleSubjectChanged;
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return LoggedInService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
+}
+
+<style>
+    /* Subject Drawer Section */
+    .subject-drawer-section {
+        margin-top: 30px;
+    }
+
+    .subject-drawer {
+        background-color: #2d3b47;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+        .subject-drawer .mud-button {
+            background-color: #ff8c00;
+            color: white;
+        }
+</style>

@@ -1,0 +1,313 @@
+﻿@using GJT_Website_OM.Services
+@using GJT_Website_OM.Models
+@using GJT_Website_OM.Utilities
+@using GJT_Website_OM.Components.Layout
+@inject BadgeDialog BadgeDialog
+@inject TopicService TopicService
+@inject QuizService QuizService
+@inject UserSession UserSession
+@inject OpenAIHttpService OpenAiService
+@inject NavigationManager NavigationManager 
+@inject IDialogService DialogService
+@page "/Exercises"
+
+<div style="background-color: #39414d; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+<MudContainer>
+
+    <br />
+
+    @if (string.IsNullOrEmpty(TopicService.SelectedTopic))
+    {
+        <MudPaper Class="pa-4">
+            <h3>Select a Subject</h3>
+            <p>Choose a subject from the menu.</p>
+        </MudPaper>
+    }
+    else
+    {
+        <br />
+
+        <MudPaper Class="pa-4">
+            <MudGrid>
+                <!-- Exercise Section: 12 columns width on extra small screens (xs) -->
+                <MudItem xs="12">
+                    <h3>@TopicService.SelectedTopic Exercises</h3>
+
+                    <MudSelect Label="Select Difficulty" @bind-Value="SelectedDifficulty">
+                        @for (int i = 1; i <= 4; i++)
+                        {
+                            int num = i;
+                            <MudSelectItem Value="@num">@num</MudSelectItem>
+                        }
+                    </MudSelect>
+
+
+                    <MudButton OnClick="LoadQuestions" Color="Color.Primary">Start Quiz</MudButton>
+
+                    @if (Questions != null && Questions.Count > 0 && SelectedQuestionIndex >= 0)
+                    {
+                        <MudCard Class="pa-4 mt-3">
+                            <MudText Typo="Typo.h6">@Questions[SelectedQuestionIndex].Question1</MudText>
+                            <MudTextField Label="Your Answer" @bind-Value="@UserAnswers[Questions[SelectedQuestionIndex].QuizId]" />
+
+                            <MudCardActions>
+                                <MudButton OnClick="PreviousQuestion" Disabled="@(SelectedQuestionIndex == 0)">Previous</MudButton>
+                                <MudButton OnClick="NextQuestion" Disabled="@(SelectedQuestionIndex == Questions.Count - 1)">Next</MudButton>
+                                <MudButton OnClick="CheckAnswer" Color="Color.Secondary">Check Answer</MudButton>
+                            </MudCardActions>
+                        </MudCard>
+
+                        @if (!string.IsNullOrEmpty(AnswerResponse))
+                        {
+                            <MudPaper Class="mt-3">
+                                <MudText>Chatbot Response: </MudText>
+                                <MudText>@AnswerResponse</MudText>
+                            </MudPaper>
+                        }
+                    }
+                </MudItem>
+
+                <!-- Chatbot and Pie Chart Section: Both 6 columns width on extra small screens (xs) -->
+                <MudItem xs="6">
+                    <MudPaper Class="pa-4">
+                        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="Index" InputLabels="@labels" Width="300px" Height="300px" />
+                    </MudPaper>
+                </MudItem>
+
+                <MudItem xs="6">
+                    <MudPaper Class="pa-4">
+                        <MudText Typo="Typo.h6">Correct Answers: @CorrectAnswers/5</MudText>
+                    </MudPaper>
+                </MudItem>
+            </MudGrid>
+        </MudPaper>
+    }
+    </MudContainer>
+    </div>
+
+@code {
+    private int SelectedDifficulty = 1;
+    private List<Question> Questions = new();
+    private Dictionary<int, string> UserAnswers = new();
+    private int SelectedQuestionIndex = -1;
+    private string AnswerResponse = "";
+    private int CorrectAnswers = 0;
+    private DateTime QuestionStartTime; // Track when the question is started
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoggedInService.isLoggedIn = CheckLoginStatus();
+
+        if (!LoggedInService.isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        await Task.CompletedTask;
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return LoggedInService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
+
+    // Data for Pie chart
+    private double[] data = { 0, 100 }; // Correct answers vs Incorrect answers (initialized)
+    private string[] labels = { "Correct", "Incorrect" };
+    private int Index = -1;
+    private string BadgeImage = string.Empty;
+
+    private async Task LoadQuestions()
+    {
+        if (string.IsNullOrEmpty(TopicService.SelectedTopic)) return;
+
+        ResetScore();
+
+        List<Quiz> Quizzes = await QuizService.GetQuizzes(SelectedDifficulty, TopicService.SelectedTopic);
+        if (Quizzes.Count != 0)
+        {
+            Questions = await QuizService.GetQuestions(Quizzes[0].QuizId);
+            UserAnswers.Clear();
+            foreach (var question in Questions)
+            {
+                UserAnswers[question.QuizId] = "";
+            }
+            SelectedQuestionIndex = 0; // Start with the first question
+            QuestionStartTime = DateTime.Now; // Start timing the first question
+        }
+    }
+
+    private void NextQuestion()
+    {
+        if (SelectedQuestionIndex < Questions.Count - 1)
+        {
+            SelectedQuestionIndex++;
+            QuestionStartTime = DateTime.Now; // Reset the start time for the next question
+        }
+    }
+
+    private void PreviousQuestion()
+    {
+        if (SelectedQuestionIndex > 0)
+        {
+            SelectedQuestionIndex--;
+            QuestionStartTime = DateTime.Now; // Reset the start time for the previous question
+        }
+    }
+
+    private async Task CheckAnswer()
+    {
+        try
+        {
+            string userAnswer = UserAnswers[Questions[SelectedQuestionIndex].QuizId];
+            AnswerResponse = "Thinking...";
+
+            // Check for abusive language
+            if (ContainsAbusiveLanguage(userAnswer))
+            {
+                // Redirect the user to a specific website if offensive language is detected
+                NavigationManager.NavigateTo("/grab");
+                return;
+            }
+
+            // Detecting suspicious behavior: Too quick answers
+            var timeSpent = DateTime.Now - QuestionStartTime;
+            if (timeSpent.TotalSeconds < 1) // Arbitrary threshold (2 seconds) for quick answers
+            {
+                NavigationManager.NavigateTo("/grab"); // Redirect to /grab if suspicious behavior is detected
+                return;
+            }
+
+            // Generate response from Chatbot
+            AnswerResponse = await OpenAiService.GetOpenAIResponseAsync($@"
+        You are being used in EDUCATIONAL quiz about {TopicService.SelectedTopic}. Assess these answers as if you were a teacher.
+        The question is: {Questions[SelectedQuestionIndex].Question1}, please thoroughly compare these 2 answers and respond with exactly 'Well Done!' for the two answering having the same meaning or for the math questions then just being the same and 'Try Again' for the 2 answers being different.
+        Don't be case-sensative but keep numbers the same.
+        The first answer is: {Questions[SelectedQuestionIndex].Answer}.
+        The second answer is: {userAnswer}.");
+
+            if (AnswerResponse.Contains("Well Done", StringComparison.OrdinalIgnoreCase))
+            {
+                CorrectAnswers++;
+            }
+            else
+            {
+                AnswerResponse = "Answer evaluation incorrect/failed. Please try again.";
+            }
+
+            // Update pie chart data
+            data[0] = CorrectAnswers;
+            data[1] = (Questions.Count - CorrectAnswers);
+
+            // **Award Badge if 5/5 is achieved**
+            if (CorrectAnswers == 5)
+            {
+                string badge = SelectedDifficulty switch
+                {
+                    1 => "Bronze",
+                    2 => "Silver",
+                    3 => "Gold",
+                    4 => "Master",
+                    5 => "Allstar",
+                    _ => "Bronze"
+                };
+
+                // Save to database
+                if (!string.IsNullOrEmpty(TopicService.SelectedTopic))
+                {
+                    await QuizService.AwardCertificate(UserSession.userId, TopicService.SelectedTopic, SelectedDifficulty, badge);
+                    await ShowBadgePopup(badge); // Show pop-up when badge is awarded
+                }
+                else
+                {
+                    AnswerResponse = "Topic is not selected.";
+                }
+            }
+
+            StateHasChanged(); // Re-render the page to update UI
+        }
+        catch (Exception ex)
+        {
+            AnswerResponse = ex.Message;
+        }
+    }
+
+    // Helper method to check for abusive language
+    private bool ContainsAbusiveLanguage(string input)
+    {
+        // List of common abusive words (expand this list as needed)
+        string[] abusiveWords = new string[] { "injection", "prompt", "stupid", "want", "dumb", "give", "answer" };
+
+        foreach (var word in abusiveWords)
+        {
+            if (input.Contains(word, StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    private async Task ShowBadgePopup(string badge)
+    {
+        var parameters = new DialogParameters
+            {
+                ["ContentText"] = $"Congratulations! You've unlocked the {badge} badge. Check your certifications!",
+                ["CertificateImageUrl"] = GetBadgeImage(badge) // This should work as it returns a string
+            };
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small };
+
+        var dialog = await DialogService.ShowAsync<BadgeDialog>("Badge Unlocked!", parameters, options);
+
+        await dialog.Result; // Wait until the dialog is closed
+
+        ResetScore(); // Reset the quiz after dialog closes
+    }
+
+
+    private string GetBadgeImage(string badgeLevel)
+    {
+        return badgeLevel.ToLower() switch
+        {
+            "bronze" => "/images/bronze.png",
+            "silver" => "/images/silver.png",
+            "gold" => "/images/gold.png",
+            "platinum" => "/images/platinum.png",
+            "master" => "/images/master.png",
+            "allstar" => "/images/allstar.png",
+            _ => "/images/default.png" // Default image if none match
+        };
+    }
+
+
+    private void OnDifficultyChanged(ChangeEventArgs e)
+    {
+        SelectedDifficulty = Convert.ToInt32(e.Value);
+        ResetScore();
+    }
+
+    private void ResetScore()
+    {
+        CorrectAnswers = 0;
+        data[0] = 0;
+        data[1] = 100;
+        StateHasChanged();
+    }
+
+    protected override void OnInitialized()
+    {
+        TopicService.OnTopicChanged += () =>
+        {
+            ResetScore();
+            StateHasChanged();
+        };
+    }
+
+    public void Dispose()
+    {
+        TopicService.OnTopicChanged -= StateHasChanged;
+    }
+}

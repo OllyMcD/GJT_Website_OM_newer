@@ -1,0 +1,111 @@
+﻿@page "/register"
+@using System;
+@using System.Text.RegularExpressions;
+@using GJT_Website_OM.Services
+@using GJT_Website_OM.Utilities
+@using GJT_Website_OM.Models
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject LoggedInService LoggedInService
+
+<div style="background-color: #39414d; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; flex-direction: column;">
+    <!-- Register Title Centered at the Top -->
+    <MudText Style="color: #fcf8e3; font-size: 2rem; font-weight: bold; margin-bottom: 20px;" Align="Align.Center">
+        Register
+    </MudText>
+
+    <MudPaper Class="pa-4" MaxWidth="400px" Elevation="2" Style="background-color: #fcf8e3;">
+        <MudText Style="color: #fcf8e3;" Typo="Typo.h4" Align="Align.Center">Register</MudText>
+        <br />
+        <MudForm>
+            <MudTextField Style="color: #6A7B3D;" Label="Username" @bind-Value="user.Username" Required="true" Class="mb-3" />
+            <MudTextField Style="color: #6A7B3D;" Label="Password" @bind-Value="user.Password" InputType="InputType.Password" Required="true" Class="mb-3" Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" />
+            <MudTextField T="string" Style="color: #6A7B3D;" Label="Confirm Password" InputType="InputType.Password" Required="true" Class="mb-3" Validation="@(new Func<string, string?>(PasswordMatch))" />
+            <MudTextField Style="color: #6A7B3D;" Label="First Name" @bind-Value="user.FirstName" Required="true" Class="mb-3" />
+            <MudTextField Style="color: #6A7B3D;" Label="Last Name" @bind-Value="user.LastName" Required="true" Class="mb-3" />
+            <MudTextField Style="color: #6A7B3D;" Label="Email" @bind-Value="user.Email" InputType="InputType.Email" Required="true" Class="mb-3" />
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="RegisterCustomer" Class="mt-3" FullWidth="true" Style="background-color: #8B9B57;">Register</MudButton>
+        </MudForm>
+
+        @if (!string.IsNullOrEmpty(message))
+        {
+            <MudAlert Severity="alertSeverity" Variant="Variant.Outlined" Square="true" Class="my-2" Style="background-color: #B9D58D; color: #6A7B3D;">@message</MudAlert>
+        }
+    </MudPaper>
+</div>
+
+@code {
+    private User user = new User();
+    private string message = string.Empty;
+    private Severity alertSeverity;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoggedInService.isLoggedIn = CheckLoginStatus();
+
+        if (LoggedInService.isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/home");
+        }
+        await Task.CompletedTask;
+    }
+
+    private bool CheckLoginStatus()
+    {
+        return LoggedInService.isLoggedIn;
+    }
+
+    private async Task RegisterCustomer()
+    {
+        if (string.IsNullOrWhiteSpace(user.Username) ||
+            string.IsNullOrWhiteSpace(user.Password) ||
+            string.IsNullOrWhiteSpace(user.FirstName) ||
+            string.IsNullOrWhiteSpace(user.LastName) ||
+            string.IsNullOrWhiteSpace(user.Email))
+        {
+            message = "All fields are required. Please fill in all the details.";
+            alertSeverity = Severity.Warning;
+            return;
+        }
+
+        user.Password = PasswordUtils.HashPassword(user.Password);
+
+        bool isAdded = await UserService.AddUserAsync(user);
+
+        if (isAdded)
+        {
+            message = "Registration successful!";
+            alertSeverity = Severity.Success;
+            user = new User();
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            message = "Username already exists. Please choose another.";
+            alertSeverity = Severity.Error;
+        }
+    }
+
+    private IEnumerable<string> PasswordStrength(string password)
+    {
+        if (string.IsNullOrWhiteSpace(password))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (password.Length < 8)
+            yield return "Password must be at least 8 characters long";
+        if (!Regex.IsMatch(password, "[A-Z]"))
+            yield return "Password must contain at least one uppercase letter";
+        if (!Regex.IsMatch(password, "[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(password, "[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+
+    private string? PasswordMatch(string confirmPassword)
+    {
+        return user.Password != confirmPassword ? "Passwords don't match" : null;
+    }
+}

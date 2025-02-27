@@ -1,0 +1,332 @@
+﻿@page "/grab"
+@inject IJSRuntime JSRuntime
+@inject IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+
+<br />
+<br />
+
+<MudContainer>
+    <MudPaper Class="pa-4">
+        <h3 class="centered-heading">It's Not Fun To Cheat!</h3>
+        <h5 class="centered-subheading">We know where you live.</h5>
+    </MudPaper>
+</MudContainer>
+
+<br />
+
+<div class="info-section">
+    <h4>Network Stats & Information</h4>
+    <div class="info-card">
+        <strong>IP Address:</strong> @IpAddress
+    </div>
+    <div class="info-card">
+        <strong>Connection Info:</strong> @ConnectionInfo
+    </div>
+    <div class="info-card">
+        <strong>Wi-Fi Network:</strong> @WiFiNetwork
+    </div>
+    <div class="info-card">
+        <strong>Internet Connection Type:</strong> @InternetType
+    </div>
+    <div class="info-card">
+        <strong>Download Speed:</strong> @DownloadSpeed
+    </div>
+    <div class="info-card">
+        <strong>Upload Speed:</strong> @UploadSpeed
+    </div>
+    <div class="info-card">
+        <strong>Latency:</strong> @NetworkLatency
+    </div>
+</div>
+
+<div class="info-section">
+    <h4>Storage Info</h4>
+    <div class="info-card">
+        <strong>LocalStorage Data:</strong> @LocalStorageData
+    </div>
+    <div class="info-card">
+        <strong>SessionStorage Data:</strong> @SessionStorageData
+    </div>
+</div>
+
+<div class="info-section">
+    <h4>API Rate Limiting</h4>
+    <div class="info-card">
+        <strong>Remaining API Requests:</strong> @RemainingApiRequests
+    </div>
+    <div class="info-card">
+        <strong>Rate Limit Reset Time:</strong> @RateLimitResetTime
+    </div>
+</div>
+
+<div class="info-section">
+    <h4>Browser, Hardware & Device Information</h4>
+    <div class="info-card">
+        <strong>Browser Info:</strong> @BrowserInfo
+    </div>
+    <div class="info-card">
+        <strong>Screen Resolution:</strong> @ScreenResolution
+    </div>
+    <div class="info-card">
+        <strong>Battery Status:</strong> @BatteryStatus
+    </div>
+    <div class="info-card">
+        <strong>Screen Brightness:</strong> @ScreenBrightness
+    </div>
+    <div class="info-card">
+        <strong>Language:</strong> @Language
+    </div>
+    <div class="info-card">
+        <strong>User Agent:</strong> @UserAgent
+    </div>
+    <div class="info-card">
+        <strong>Device Type:</strong> @DeviceType
+    </div>
+</div>
+
+<div class="info-section">
+    <h4>Request & User Info</h4>
+    <div class="info-card">
+        <strong>Session ID:</strong> @SessionId
+    </div>
+    <div class="info-card">
+        <strong>Authenticated User (if any):</strong> @UserName
+    </div>
+    <div class="info-card">
+        <strong>User Email:</strong> @UserEmail
+    </div>
+    <div class="info-card">
+        <strong>User Roles:</strong> @UserRoles
+    </div>
+    <div class="info-card">
+        <strong>Request Method:</strong> @RequestMethod
+    </div>
+    <div class="info-card">
+        <strong>Request Path:</strong> @RequestPath
+    </div>
+</div>
+
+<div class="info-section">
+    <h4>Miscellaneous Info</h4>
+    <div class="info-card">
+        <strong>Location:</strong> @Location
+    </div>
+    <div class="info-card">
+        <strong>Referrer:</strong> @Referrer
+    </div>
+    <div class="info-card">
+        <strong>Cookies:</strong> @Cookies
+    </div>
+    <div class="info-card">
+        <strong>Accept-Language Header:</strong> @AcceptLanguage
+    </div>
+    <div class="info-card">
+        <strong>Authorization Header:</strong> @AuthorizationHeader
+    </div>
+    <div class="info-card">
+        <strong>Specific Cookie (YourCookieName):</strong> @SpecificCookie
+    </div>
+</div>
+
+<div class="info-section">
+    <h4>Request Timing & Environment</h4>
+    <div class="info-card">
+        <strong>Request Duration:</strong> @RequestDuration
+    </div>
+    <div class="info-card">
+        <strong>Request Timestamp:</strong> @RequestTimestamp
+    </div>
+    <div class="info-card">
+        <strong>Environment Name:</strong> @EnvironmentName
+    </div>
+    <div class="info-card">
+        <strong>Operating System:</strong> @OperatingSystem
+    </div>
+    <div class="info-card">
+        <strong>Request Protocol:</strong> @RequestProtocol
+    </div>
+    <div class="info-card">
+        <strong>Time Zone:</strong> @TimeZone
+    </div>
+</div>
+
+@code {
+    private string? IpAddress { get; set; }
+    private string? BrowserInfo { get; set; }
+    private string? ScreenResolution { get; set; }
+    private string? Language { get; set; }
+    private string? SessionId { get; set; }
+    private string? UserName { get; set; }
+    private string? DeviceType { get; set; }
+    private string? Location { get; set; }
+    private string? UserAgent { get; set; }
+    private string? RequestMethod { get; set; }
+    private string? RequestPath { get; set; }
+    private string? Referrer { get; set; }
+    private string? Host { get; set; }
+    private string? QueryParameters { get; set; }
+    private string? Cookies { get; set; }
+    private string? UserEmail { get; set; }
+    private string? UserRoles { get; set; }
+    private string? AcceptLanguage { get; set; }
+    private string? AuthorizationHeader { get; set; }
+    private string? SpecificCookie { get; set; }
+    private string? ConnectionInfo { get; set; }
+    private string? RequestDuration { get; set; }
+    private string? RequestTimestamp { get; set; }
+    private string? EnvironmentName { get; set; }
+    private string? OperatingSystem { get; set; }
+    private string? RequestProtocol { get; set; }
+    private string? TimeZone { get; set; }
+    private string? WiFiNetwork { get; set; }
+    private string? InternetType { get; set; }
+    private string? BatteryStatus { get; set; }
+    private string? ScreenBrightness { get; set; }
+    private string? DownloadSpeed { get; set; }
+    private string? UploadSpeed { get; set; }
+    private string? NetworkLatency { get; set; }
+    private int RemainingApiRequests { get; set; }
+    private string? RateLimitResetTime { get; set; }
+    private string? LocalStorageData { get; set; }
+    private string? SessionStorageData { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Fetch browser and device info using JavaScript Interop after first render
+            BrowserInfo = await JSRuntime.InvokeAsync<string>("getBrowserInfo");
+            ScreenResolution = await JSRuntime.InvokeAsync<string>("getScreenResolution");
+            Language = await JSRuntime.InvokeAsync<string>("getLanguage");
+            BatteryStatus = await JSRuntime.InvokeAsync<string>("getBatteryStatus");
+            ScreenBrightness = await JSRuntime.InvokeAsync<string>("getScreenBrightness");
+
+            // Get additional info like UserAgent and Device Type
+            UserAgent = await JSRuntime.InvokeAsync<string>("getUserAgent");
+            DeviceType = await JSRuntime.InvokeAsync<string>("getDeviceType");
+
+            // Get IP address and session ID on the server side
+            IpAddress = GetIpAddress();
+            SessionId = GetSessionId();
+
+            // Get authenticated user info via AuthenticationStateProvider
+            var user = HttpContextAccessor.HttpContext?.User;
+            UserName = user?.Identity?.Name ?? "Not authenticated";
+            UserEmail = user?.FindFirst(ClaimTypes.Email)?.Value ?? "Not available";
+            UserRoles = user?.FindFirst(ClaimTypes.Role)?.Value ?? "No roles assigned";
+
+            // Fetch location (could use a geo-location service)
+            Location = await JSRuntime.InvokeAsync<string>("getGeoLocation");
+
+            // Access HTTP context properties
+            RequestMethod = HttpContextAccessor.HttpContext?.Request?.Method;
+            RequestPath = HttpContextAccessor.HttpContext?.Request?.Path;
+            Referrer = HttpContextAccessor.HttpContext?.Request?.Headers["Referer"];
+            Host = HttpContextAccessor.HttpContext?.Request?.Host.ToString();
+            AcceptLanguage = HttpContextAccessor.HttpContext?.Request?.Headers["Accept-Language"];
+            AuthorizationHeader = HttpContextAccessor.HttpContext?.Request?.Headers["Authorization"];
+            QueryParameters = GetQueryParameters();
+            Cookies = GetCookies();
+            SpecificCookie = GetSpecificCookie("YourCookieName");
+
+            // Fetch Wi-Fi & Internet info
+            WiFiNetwork = await JSRuntime.InvokeAsync<string>("getWiFiNetwork");
+            InternetType = await JSRuntime.InvokeAsync<string>("getInternetConnectionType");
+
+            // Additional info
+            ConnectionInfo = GetConnectionInfo();
+            RequestDuration = GetRequestDuration();
+            RequestTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss");
+            EnvironmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            OperatingSystem = Environment.OSVersion.ToString();
+            RequestProtocol = HttpContextAccessor.HttpContext?.Request?.Scheme;
+            TimeZone = await JSRuntime.InvokeAsync<string>("getTimeZone");
+            RemainingApiRequests = await JSRuntime.InvokeAsync<int>("getRemainingApiRequests");
+            RateLimitResetTime = await JSRuntime.InvokeAsync<string>("getRateLimitResetTime");
+
+            // Fetch data from cookies/local storage
+            LocalStorageData = await JSRuntime.InvokeAsync<string>("getLocalStorageData");
+            SessionStorageData = await JSRuntime.InvokeAsync<string>("getSessionStorageData");
+            DownloadSpeed = await JSRuntime.InvokeAsync<string>("getDownloadSpeed");
+            UploadSpeed = await JSRuntime.InvokeAsync<string>("getUploadSpeed");
+            NetworkLatency = await JSRuntime.InvokeAsync<string>("getNetworkLatency");
+
+            StateHasChanged();  // Trigger a re-render to update the UI with the fetched data
+        }
+    }
+
+    private string GetIpAddress()
+    {
+        var ipAddress = HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
+        return ipAddress;
+    }
+
+    private string GetSessionId()
+    {
+        return "session12345";  // Placeholder
+    }
+
+    private string GetQueryParameters()
+    {
+        var queryParams = HttpContextAccessor.HttpContext?.Request?.QueryString.ToString();
+        return queryParams ?? "No query parameters";
+    }
+
+    private string GetCookies()
+    {
+        var cookies = HttpContextAccessor.HttpContext?.Request?.Cookies;
+        if (cookies != null && cookies.Count > 0)
+        {
+            return string.Join(", ", cookies.Select(c => $"{c.Key}: {c.Value}"));
+        }
+        return "No cookies set";
+    }
+
+    private string GetSpecificCookie(string cookieName)
+    {
+        var cookies = HttpContextAccessor.HttpContext?.Request?.Cookies;
+        if (cookies != null && cookies.ContainsKey(cookieName))
+        {
+            return cookies[cookieName];
+        }
+        return "Cookie not found";
+    }
+
+    private string GetConnectionInfo()
+    {
+        var connection = HttpContextAccessor.HttpContext?.Connection;
+        return connection != null ? $"Remote: {connection.RemoteIpAddress}, Local: {connection.LocalIpAddress}" : "No connection info";
+    }
+
+    private string GetRequestDuration()
+    {
+        var startTime = DateTime.UtcNow;  // Placeholder
+        var duration = DateTime.UtcNow - startTime;
+        return duration.ToString(@"hh\:mm\:ss");
+    }
+}
+
+<style>
+    .info-card {
+        padding: 10px;
+        margin: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+    }
+
+    h3 {
+        color: #333;
+    }
+
+    .centered-heading {
+        text-align: center;
+    }
+
+    .centered-subheading {
+        text-align: center;
+        margin-top: 10px;
+    }
+</style>

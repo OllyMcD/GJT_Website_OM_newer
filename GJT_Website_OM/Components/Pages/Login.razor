@@ -1,0 +1,172 @@
+﻿@page "/login"
+@using System;
+@using System.Text.RegularExpressions;
+@using GJT_Website_OM.Services
+@using GJT_Website_OM.Utilities
+@using GJT_Website_OM.Models
+@inject LoggedInService LoggedInService
+@inject NavigationManager NavigationManager
+@inject UserService UserService
+@inject UserSession UserSession
+
+<div style="background-color: #39414d; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <MudGrid>
+        <MudItem xs="12" class="d-flex justify-center mb-4">
+            <MudText Typo="Typo.h4" Class="font-weight-bold" Style="color: #fcf8e3;">Login</MudText>
+        </MudItem>
+
+        <MudItem xs="12" sm="7">
+            <MudPaper Class="pa-4">
+                <MudForm @ref="form" @bind-IsValid="@success" @bind-Errors="@errors">
+                    <MudTextField T="string" Label="Username" @bind-Value="username" Required="true" RequiredError="Username is required!" Class="mb-3" />
+                    <MudTextField T="string" Label="Password" @bind-Value="password" InputType="@PasswordInput" Required="true" RequiredError="Password is required!" Adornment="Adornment.End" AdornmentIcon="@PasswordInputIcon" OnAdornmentClick="ButtonTestclick" AdornmentAriaLabel="Show Password"
+                                  HelperText="Enter your password" Validation="@(new Func<string, IEnumerable<string>>(PasswordStrength))" Class="mb-3" />
+                    <div class="d-flex align-center justify-space-between">
+                        <MudCheckBox T="bool" Label="Remember me" />
+                        <MudButton Variant="Variant.Filled" Color="Color.Primary" Disabled="@(!success)" Class="ml-auto" OnClick="LoginUser">Login</MudButton>
+                    </div>
+                </MudForm>
+            </MudPaper>
+        </MudItem>
+
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <!-- Only show the login result message (success, warning, or error) -->
+                @if (!string.IsNullOrEmpty(message))
+                {
+                    <MudAlert Severity="@alertSeverity" Class="mt-4">
+                        @message
+                    </MudAlert>
+                }
+            </MudPaper>
+        </MudItem>
+
+        <!-- Not a member yet section -->
+        <MudItem xs="12" sm="12">
+            <MudPaper Class="pa-6 mb-4 shadow-md" Elevation="4">
+                <MudGrid>
+                    <MudItem xs="12" class="d-flex justify-space-between align-center">
+                        <MudText Typo="Typo.h5" Class="font-weight-bold">Not a member yet?</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.PersonAdd" Color="Color.Primary" Href="/register" />
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudText Class="mt-2" Typo="Typo.body1">
+                            Create an account today and enjoy exclusive benefits, early access to new features, and more.
+                        </MudText>
+                    </MudItem>
+                    <MudItem xs="12">
+                        <MudButton Variant="Variant.Outlined" Color="Color.Primary" Href="/register" Class="mt-3" FullWidth="true">
+                            Register Now
+                        </MudButton>
+                    </MudItem>
+                </MudGrid>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</div>
+
+
+@code {
+
+    private string? username;
+    private string? password;
+    private string message = string.Empty;
+    private Severity alertSeverity;
+    private bool isLoggedIn;
+    bool success;
+    string[] errors = { };
+    MudForm? form;
+
+    bool isShow;
+    InputType PasswordInput = InputType.Password;
+    string PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+
+    void ButtonTestclick()
+    {
+        @if (isShow)
+        {
+            isShow = false;
+            PasswordInputIcon = Icons.Material.Filled.VisibilityOff;
+            PasswordInput = InputType.Password;
+        }
+        else
+        {
+            isShow = true;
+            PasswordInputIcon = Icons.Material.Filled.Visibility;
+            PasswordInput = InputType.Text;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoggedIn = CheckLoginStatus();
+
+        if (isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/home");
+        }
+        await Task.CompletedTask;
+    }
+
+    private bool CheckLoginStatus()
+    {
+        return LoggedInService.isLoggedIn;
+    }
+
+    private async Task LoginUser()
+    {
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
+        {
+            message = "Username and password are required.";
+            alertSeverity = Severity.Warning;
+            errors = new string[] { message };
+            return;
+        }
+
+        var hashedPassword = PasswordUtils.HashPassword(password);
+        bool superman = await UserService.ValidateLoginAsync(username, hashedPassword);
+
+        if (superman)
+        {
+            LoggedInService.Login(username);
+            message = "Login successful!";
+            alertSeverity = Severity.Success;
+            User? users = await UserService.GetUserByUsernameAsync(username);
+            
+            if (users != null)
+            {           
+                UserSession.userId = users.UserId;
+                NavigationManager.NavigateTo("/home");
+            }
+             else
+    {
+        message = "User not found.";
+        alertSeverity = Severity.Error;
+        errors = new string[] { message };
+    }
+        }
+        else
+        {
+            message = "Invalid username or password.";
+            alertSeverity = Severity.Error;
+            errors = new string[] { message };
+        }
+    }
+
+    private IEnumerable<string> PasswordStrength(string pw)
+    {
+        if (string.IsNullOrWhiteSpace(pw))
+        {
+            yield return "Password is required!";
+            yield break;
+        }
+        if (pw.Length < 8)
+            yield return "Password must be at least 8 characters long";
+        if (!Regex.IsMatch(pw, @"[A-Z]"))
+            yield return "Password must contain at least one uppercase letter";
+        if (!Regex.IsMatch(pw, @"[a-z]"))
+            yield return "Password must contain at least one lowercase letter";
+        if (!Regex.IsMatch(pw, @"[0-9]"))
+            yield return "Password must contain at least one digit";
+    }
+}

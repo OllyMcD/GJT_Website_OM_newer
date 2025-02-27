@@ -1,0 +1,377 @@
+﻿@page "/Tutorials"
+@using GJT_Website_OM.Services
+@inject LoggedInService LoggedInService
+@inject NavigationManager NavigationManager
+
+<div style="background-color:#39414d">
+    <MudContainer MaxWidth="MaxWidth.ExtraLarge" Class="pa-5 nike-theme">
+        <MudText Typo="Typo.h4" Style="background-color:#fcf8e3" Align="Align.Center" GutterBottom>
+            Educational Tutorials
+        </MudText>
+
+    <!-- Maths Section -->
+        <MudPaper Outlined Class="pa-5 mb-0 border-dashed" Style="background-color:#fcf8e3">
+        <MudText Typo="Typo.h5" GutterBottom>Maths</MudText>
+        <MudStack Spacing="3">
+            <!-- KeyStage 3 -->
+            <MudText Typo="Typo.h6" GutterBottom>KeyStage 3 - Primary School</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.bbc.co.uk/bitesize/subjects/zqhs34j" Target="_blank">Arithmetic Basics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://mathigon.org/" Target="_blank">Math Patterns</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.khanacademy.org/math/cc-seventh-grade-math" Target="_blank">Geometry Concepts</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.cuemath.com/" Target="_blank">Fraction Fun</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.splashlearn.com/" Target="_blank">Advanced Calculations</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.cbbc.co.uk/learning" Target="_blank">Interactive Math Games</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.timestables.com/" Target="_blank">Multiplication Mastery</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mathsisfun.com/" Target="_blank">Fun with Numbers</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mathgoodies.com/" Target="_blank">Math Puzzles</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.edutopia.org/article/engaging-students-math-activities" Target="_blank">Math Challenges</MudLink>
+                </MudChip>
+            </MudStack>
+
+            <!-- KeyStage 4 -->
+            <MudText Typo="Typo.h6" GutterBottom>KeyStage 4 - Secondary School</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://corbettmaths.com/" Target="_blank">Algebra Basics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mathswatch.co.uk/" Target="_blank">Quadratic Equations</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://revisionmaths.com/" Target="_blank">Functions & Graphs</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.senecalearning.com/" Target="_blank">Trigonometry</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicsandmathsrevision.co.uk/" Target="_blank">Calculus Basics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mathsgenie.co.uk/" Target="_blank">Probability</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.goconqr.com/en/examtime" Target="_blank">Exam Revision</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.tutor2u.net/math" Target="_blank">Mathematics for Exams</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.alevelmathsrevision.com/" Target="_blank">Advanced Level Math</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.edexcelmaths.com/" Target="_blank">GCSE Revision</MudLink>
+                </MudChip>
+            </MudStack>
+
+            <!-- KeyStage 5 -->
+            <MudText Typo="Typo.h6" GutterBottom>KeyStage 5 - Post-Secondary Education</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip">
+                    <MudLink Href="https://www.examsolutions.net/" Target="_blank">Advanced Algebra</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://integralmaths.org/" Target="_blank">Differential Equations</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mathscareers.org.uk/" Target="_blank">Mathematical Careers</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.s-cool.co.uk/" Target="_blank">Math Exam Resources</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.sheffield.ac.uk/maths-support" Target="_blank">University Math Support</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.desmos.com/calculator" Target="_blank">Online Calculators</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mathedpage.org.uk/" Target="_blank">Math Resources</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.purplemath.com/" Target="_blank">Mathematical Insights</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.khanacademy.org/math" Target="_blank">Khan Academy Math</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.open.edu/openlearn/science-maths-technology/mathematics-and-statistics" Target="_blank">Open University Math</MudLink>
+                </MudChip>
+            </MudStack>
+        </MudStack>
+    </MudPaper>
+
+
+    <br />
+
+    <!-- Physics Section -->
+        <MudPaper Outlined Class="pa-5 mb-5 border-dashed" Style="background-color:#fcf8e3">
+        <MudText Typo="Typo.h5" GutterBottom>Physics</MudText>
+        <MudStack Spacing="3">
+            <!-- KeyStage 3 -->
+            <MudText Typo="Typo.h6" GutterBottom>Stage 1: Beginner</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.bbc.co.uk/bitesize/subjects/zsthycw" Target="_blank">Foundational Concepts</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.exploratorium.edu/" Target="_blank">Basic Experiments</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://scienceworld.ca/resources/" Target="_blank">Interactive Resources</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.khanacademy.org/science/physics" Target="_blank">Intro to Physics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.chemistryworld.com/" Target="_blank">Physics in Chemistry</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicsclassroom.com/" Target="_blank">Basic Mechanics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.phet.colorado.edu/en/simulations/category/physics" Target="_blank">Simulations</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.acs.org/content/acs/en/education.html" Target="_blank">Learn Through Chemistry</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicscentral.com/" Target="_blank">Fundamental Physics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.si.edu/physics" Target="_blank">Physics in Everyday Life</MudLink>
+                </MudChip>
+            </MudStack>
+
+            <!-- KeyStage 4 -->
+            <MudText Typo="Typo.h6" GutterBottom>Stage 2: Intermediate</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.kerboodle.com/" Target="_blank">Intro to Forces</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://revisionworld.com/" Target="_blank">The Universe in Motion</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicstutoronline.co.uk/" Target="_blank">Energy and Waves</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.senecalearning.com/" Target="_blank">Electricity & Magnetism</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicsandmathsrevision.co.uk/" Target="_blank">Thermodynamics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.khanacademy.org/science/physics" Target="_blank">Energy Conservation</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicstutor.co.uk/" Target="_blank">Advanced Mechanics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.goconqr.com/en/examtime" Target="_blank">Wave Phenomena</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.tutor2u.net/physics" Target="_blank">Circular Motion</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physics360.co.uk/" Target="_blank">Nuclear Physics</MudLink>
+                </MudChip>
+            </MudStack>
+
+            <!-- KeyStage 5 -->
+            <MudText Typo="Typo.h6" GutterBottom>Stage 3: Advanced</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://isaacphysics.org/" Target="_blank">Quantum Mechanics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.physicsandmathstutor.com/" Target="_blank">Electromagnetic Theory</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.a-levelphysicstutor.com/" Target="_blank">Astrophysics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.edexcelmaths.com/physics" Target="_blank">Particle Physics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.openlearn.open.ac.uk/" Target="_blank">Thermodynamic Systems</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.purplemath.com" Target="_blank">Advanced Electricity</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.tutor2u.net/physics" Target="_blank">Fluid Dynamics</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.s-cool.co.uk/physics" Target="_blank">Wave Theory</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.examboard.co.uk/physics/" Target="_blank">Nuclear Reactions</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color: #F3CA5F;">
+                    <MudLink Href="https://www.mytutor.co.uk/physics" Target="_blank">Relativity</MudLink>
+                </MudChip>
+            </MudStack>
+        </MudStack>
+    </MudPaper>
+
+    <br />
+
+    <!-- Computing Section -->
+        <MudPaper Outlined Class="pa-5 justify-center border-dashed" Style="background-color:#fcf8e3">
+        <MudText Typo="Typo.h5" GutterBottom>Computing</MudText>
+        <MudStack Spacing="3">
+            <!-- KeyStage 3 -->
+            <MudText Typo="Typo.h6" GutterBottom>Stage 1 - Introductory Computing</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.bbc.co.uk/bitesize/subjects/zvc9q6f" Target="_blank">Beginner (Level 1)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.code.org/" Target="_blank">Basic Coding (Level 2)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://hourofcode.com/" Target="_blank">First Project (Level 3)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.khanacademy.org/computing/computer-programming" Target="_blank">Intro to Programming (Level 4)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.codecademy.com/learn/learn-javascript" Target="_blank">JavaScript Basics (Level 5)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.w3schools.com/" Target="_blank">HTML & CSS (Level 6)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://scratch.mit.edu/" Target="_blank">Scratch Programming (Level 7)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.freecodecamp.org/" Target="_blank">FreeCodeCamp (Level 8)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.python.org/" Target="_blank">Python Basics (Level 9)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.geeksforgeeks.org/computer-science/" Target="_blank">CS Fundamentals (Level 10)</MudLink>
+                </MudChip>
+            </MudStack>
+
+            <!-- KeyStage 4 -->
+            <MudText Typo="Typo.h6" GutterBottom>Stage 2 - Intermediate Computing</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.teachcomputing.org/curriculum/key-stage-4" Target="_blank">Intro to KeyStage 4 (Level 1)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.codecademy.com/" Target="_blank">Codecademy (Level 2)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://replit.com/" Target="_blank">Code Playground (Level 3)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.udemy.com/courses/search/?q=computing" Target="_blank">Computing Courses (Level 4)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.coursera.org/courses?query=computing" Target="_blank">Coursera Computing (Level 5)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.edx.org/learn/computer-science" Target="_blank">Computer Science (Level 6)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.open.edu/openlearn/ocw/mod/oucontent/view.php?id=7046" Target="_blank">OpenLearn CS (Level 7)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.w3schools.com/whatis/" Target="_blank">Web Basics (Level 8)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.tutorialspoint.com/computer_science/index.htm" Target="_blank">Computer Science (Level 9)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.khanacademy.org/computing/computer-science" Target="_blank">CS for Beginners (Level 10)</MudLink>
+                </MudChip>
+            </MudStack>
+
+            <!-- KeyStage 5 -->
+            <MudText Typo="Typo.h6" GutterBottom>Stage 3 - Advanced Computing</MudText>
+            <MudStack Row Wrap="Wrap.Wrap">
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.udemy.com/" Target="_blank">Advanced Courses (Level 1)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.coursera.org/" Target="_blank">Coursera (Level 2)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.edx.org/" Target="_blank">edX (Level 3)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.pluralsight.com/courses" Target="_blank">Pluralsight (Level 4)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.linkedin.com/learning/" Target="_blank">LinkedIn Learning (Level 5)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.codecademy.com/learn" Target="_blank">Advanced JavaScript (Level 6)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.simplilearn.com" Target="_blank">Simplilearn (Level 7)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.udacity.com/" Target="_blank">Udacity (Level 8)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.turing.com/academy" Target="_blank">Turing Academy (Level 9)</MudLink>
+                </MudChip>
+                <MudChip T="object" Class="nike-chip" Style="background-color:#F3CA5F;">
+                    <MudLink Href="https://www.geeksforgeeks.org/" Target="_blank">GeeksforGeeks (Level 10)</MudLink>
+                </MudChip>
+            </MudStack>
+        </MudStack>
+    </MudPaper>
+
+
+</MudContainer>
+</div>
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        LoggedInService.isLoggedIn = CheckLoginStatus();
+
+        if (!LoggedInService.isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/");
+        }
+        await Task.CompletedTask;
+    }
+
+    private bool CheckLoginStatus()
+    {
+        // Simulate login status; replace this with your actual logic
+        return LoggedInService.isLoggedIn; // Simulating that the user is logged in for this example
+    }
+}
+
+
+   
+
+

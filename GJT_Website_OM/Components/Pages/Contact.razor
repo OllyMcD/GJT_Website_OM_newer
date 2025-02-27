@@ -1,0 +1,25 @@
+﻿@page "/Contact"
+
+<div style="background-color: #39414d; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+<MudPaper Class="contact-container">
+    <MudText Typo="Typo.h5" Class="text-center">Contact Us</MudText>
+
+    <MudForm>
+        <MudTextField T="string" Label="Name" Variant="Variant.Filled" Clearable="true" FullWidth=" true" Required="true" />
+        <MudTextField T="string" Label="Email" Variant="Variant.Filled" Clearable="true" FullWidth=" true" Required="true" />
+        <MudTextField T="string" Label="Message" Variant="Variant.Filled" FullWidth="true" Required="true" Rows="4" />
+        
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="SendMessage">Send Message</MudButton>
+    </MudForm>
+</MudPaper>
+</div>
+
+@code {
+    private async Task SendMessage()
+    {
+        // Handle sending the message (e.g., saving to a database, sending an email, etc.)
+        // For now, just display a simple message
+        await Task.Delay(500);
+        Console.WriteLine("Message Sent!");
+    }
+}

@@ -1,0 +1,15 @@
+﻿@page "/Accessibility"
+<canvas id="Matrix"></canvas>
+
+@code {
+    [Inject] IJSRuntime JSRuntime { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Call the JavaScript function to initialize the matrix effect
+            await JSRuntime.InvokeVoidAsync("eval", "window.onload();");
+        }
+    }
+}

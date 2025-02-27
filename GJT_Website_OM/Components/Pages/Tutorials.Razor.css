@@ -1,0 +1,18 @@
+﻿.nike-chip {
+    margin: 5px; /* Add space between chips */
+    padding: 8px 16px; /* Add padding inside the chips */
+    font-size: 14px; /* Adjust font size for readability */
+    display: inline-flex; /* Ensure they are in a row */
+    align-items: center; /* Align items centrally inside the chip */
+}
+
+.mud-stack-row {
+    display: flex;
+    flex-wrap: wrap; /* Ensure chips wrap when space is tight */
+    gap: 10px; /* Optional: add space between wrapped chips */
+}
+
+/* Optional: Add a margin to the container for spacing around the section */
+.pa-5 {
+    margin-bottom: 20px;
+}

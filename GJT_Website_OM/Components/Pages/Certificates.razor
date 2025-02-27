@@ -1,0 +1,126 @@
+﻿@page "/Certificates"
+@using GJT_Website_OM.Services
+@using GJT_Website_OM.Utilities
+@using GJT_Website_OM.Models
+@using GJT_Website_OM.Components.Layout
+@inject QuizService QuizService
+@inject UserSession UserSession
+@inject LoggedInService LoggedInService
+@inject NavigationManager NavigationManager
+@inject BadgeDialog BadgeDialog
+@inject IDialogService DialogService
+
+<div style="background-color: #39414d; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <MudContainer>
+        <MudPaper Class="pa-4">
+            <h3>Your Certificates</h3>
+
+            @if (certificates == null)
+            {
+                <MudText>Loading...</MudText>
+            }
+            else if (certificates.Count == 0)
+            {
+                <MudText>You have not earned any certificates yet.</MudText>
+            }
+            else
+            {
+                foreach (Usercertificate certificate in certificates)
+                {
+                    <br />
+                    <br />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">@certificate.Topic Certificate</MudText>
+                        <MudDivider Class="my-2" />
+                        <MudGrid>
+                            <MudItem xs="12" sm="6">
+                                <MudText Typo="Typo.body1"><strong>Topic:</strong> @certificate.Topic</MudText>
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudText Typo="Typo.body1"><strong>Badge Level:</strong> @certificate.BadgeLevel</MudText>
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudText Typo="Typo.body1"><strong>Difficulty:</strong> @certificate.Difficulty</MudText>
+                            </MudItem>
+                            <MudItem xs="12" sm="6">
+                                <MudText Typo="Typo.body1"><strong>Date:</strong> @certificate.DateEarned</MudText>
+                            </MudItem>
+                            <MudItem xs="12">
+                                <MudImage Src="@GetBadgeImage(certificate.BadgeLevel)" Alt="Badge" Width="150" Height="150" />
+                            </MudItem>
+                        </MudGrid>
+                    </MudCardContent>
+                }
+            }
+        </MudPaper>
+    </MudContainer>
+</div>
+
+@code {
+
+    private List<Usercertificate> certificates = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        LoggedInService.isLoggedIn = CheckLoginStatus();
+
+        if (!LoggedInService.isLoggedIn)
+        {
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+
+        certificates = await QuizService.GetCertificates(UserSession.userId);
+
+        // Check if the user already has the Allstar badge
+        bool hasAllstarBadge = certificates.Any(c => c.Topic == "Allstar Completion");
+
+        // Check if the user has a Level 4 (Master) badge in all required subjects
+        bool hasMaths = certificates.Any(c => c.BadgeLevel == "Master" && c.Topic == "Maths");
+        bool hasPhysics = certificates.Any(c => c.BadgeLevel == "Master" && c.Topic == "Physics");
+        bool hasComputing = certificates.Any(c => c.BadgeLevel == "Master" && c.Topic == "Computing");
+
+        // If the user has all three and hasn't received the Allstar badge yet, award it
+        if (!hasAllstarBadge && hasMaths && hasPhysics && hasComputing)
+        {
+            await QuizService.AwardAllstarBadge(UserSession.userId);
+            certificates = await QuizService.GetCertificates(UserSession.userId); // Refresh certificates list
+
+            // Show the Allstar badge popup
+            await ShowAllstarBadgePopup("Allstar", GetBadgeImage("allstar"));
+        }
+    }
+
+    private async Task ShowAllstarBadgePopup(string badge, string certificateImageUrl)
+    {
+
+        var parameters = new DialogParameters
+            {
+                ["ContentText"] = $"Well Done! You have mastered all subjects. You've unlocked the {badge} badge!",
+                ["CertificateImageUrl"] = GetBadgeImage(badge)  // Add certificate image URL here
+            };
+
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small };
+
+        var dialog = await DialogService.ShowAsync<BadgeDialog>("Badge Unlocked!", parameters, options);
+    }
+
+    private bool CheckLoginStatus()
+    {
+        return LoggedInService.isLoggedIn;
+    }
+
+    private string GetBadgeImage(string badgeLevel)
+    {
+        return badgeLevel.ToLower() switch
+        {
+            "bronze" => "/images/bronze.png",
+            "silver" => "/images/silver.png",
+            "gold" => "/images/gold.png",
+            "platinum" => "/images/platinum.png",
+            "master" => "/images/master.png",
+            "allstar" => "/images/allstar.png",
+            _ => "/images/default.png" // Default image if none match
+        };
+    }
+}

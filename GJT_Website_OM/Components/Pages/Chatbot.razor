@@ -1,0 +1,29 @@
+﻿@page "/ChatBot"
+@inject OpenAIHttpService OpenAiService
+<MudContainer>
+    <MudText Typo="Typo.h4">Ask OpenAI</MudText>
+    <MudTextField @bind-Value="UserInput" Label="Enter your question..." />
+    <MudButton OnClick="SendMessage" Color="Color.Primary">Submit</MudButton>
+    <MudPaper>
+        <MudText>@Response</MudText>
+    </MudPaper>
+</MudContainer>
+
+@code {
+    private string UserInput = "";
+    private string Response = "Waiting for input...";
+
+    private async Task SendMessage()
+    {
+        try
+        {
+            Response = "Thinking...";
+            Response = await OpenAiService.GetOpenAIResponseAsync($"This answer is from a website i designed about tutoring students you are tasked to reply to this answer in very simple terms from a student enquiring a question however they have to be educational questions such as maths, physics or computing; now answer me this answer to your best ability otherwise reply 'Try something else': {UserInput}.");
+        }
+        catch (Exception ex)
+        {
+            Response = ex.Message;
+        }
+
+    }
+}

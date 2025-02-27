@@ -1,0 +1,32 @@
+﻿@page "/darkmode"
+@inject IJSRuntime JSRuntime
+
+<h3>Dark Mode Toggle</h3>
+<button @onclick="ToggleDarkMode">Toggle Dark Mode</button>
+
+@code {
+    private bool _isDarkMode;
+    private bool _isFirstRender = true; // Prevents repeated execution
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _isDarkMode = await JSRuntime.InvokeAsync<string>("getCookie", "gfg_theme") == "dark";
+            await JSRuntime.InvokeVoidAsync("applyTheme", _isDarkMode ? "dark" : "light");
+
+            _isFirstRender = false;
+            StateHasChanged(); // Ensures UI updates correctly
+        }
+    }
+
+    private async Task ToggleDarkMode()
+    {
+        _isDarkMode = !_isDarkMode;
+        var newTheme = _isDarkMode ? "dark" : "light";
+
+        // Set the theme in cookies and apply it
+        await JSRuntime.InvokeVoidAsync("setCookie", "gfg_theme", newTheme, 7);
+        await JSRuntime.InvokeVoidAsync("applyTheme", newTheme);
+    }
+}
