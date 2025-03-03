@@ -181,8 +181,9 @@
             // Generate response from Chatbot
             AnswerResponse = await OpenAiService.GetOpenAIResponseAsync($@"
         You are being used in EDUCATIONAL quiz about {TopicService.SelectedTopic}. Assess these answers as if you were a teacher.
-        The question is: {Questions[SelectedQuestionIndex].Question1}, please thoroughly compare these 2 answers and respond with exactly 'Well Done!' for the two answering having the same meaning or for the math questions then just being the same and 'Try Again' for the 2 answers being different.
+        The question is: {Questions[SelectedQuestionIndex].Question1}, please thoroughly compare these 2 answers and respond with exactly 'Well Done!' for the two answering having the same meaning or for the math questions then just be exact answers, and 'Try Again' for the 2 answers being different.
         Don't be case-sensative but keep numbers the same.
+        Triple check if the answers are the same or different.
         The first answer is: {Questions[SelectedQuestionIndex].Answer}.
         The second answer is: {userAnswer}.");
 
@@ -240,18 +241,18 @@
 
         // List of common abusive words (expand this list as needed)
         string[] abusiveWords = new string[] {  "injection","inject","prompt","stupid","want","dumb","give","answer","cheat","send",
-                                                "hack","hacker","crack","exploit","malicious","phish","scam","fraud","leak","breach",
-                                                "attack","crash","brute","force","zero-day","vulnerable","trojan","worm","virus",
-                                                "rootkit","spyware","keylogger","spoof","denial","service","flood","botnet","dump",
-                                                "spam","password","hash","keygen","ransom","phishing","malware","pwn","owned",
-                                                "deface","social-engineering","payload","cheater","scammer","misuse","abuse","trick",
-                                                "attack","lockdown","degrade","pwned","fraudster","compromise","intercept","deception",
-                                                "spoofing","counterfeit","troll","man-in-the-middle","key-farming","exfiltrate","dirty",
-                                                "wormhole","detour","crack","debug","sabotage","vulnerability","debugger","manipulate",
-                                                "bypass","clueless","idiot","jerk","dummy","loser","screwup","worthless","pathetic",
-                                                "useless","weakling","trash","simpleton","moron","fool","disaster","failure","hopeless",
-                                                "insignificant","worthless","silly","imbecile","disappointing","helpless","dumbass","twit",
-                                                "brainless","loser","incompetent","blunder","failure","pathetic","stupidity","ignorant",
+                                                // "hack","hacker","crack","exploit","malicious","phish","scam","fraud","leak","breach",
+                                                // "attack","crash","brute","force","zero-day","vulnerable","trojan","worm","virus",
+                                                // "rootkit","spyware","keylogger","spoof","denial","service","flood","botnet","dump",
+                                                // "spam","password","hash","keygen","ransom","phishing","malware","pwn","owned",
+                                                // "deface","social-engineering","payload","cheater","scammer","misuse","abuse","trick",
+                                                // "attack","lockdown","degrade","pwned","fraudster","compromise","intercept","deception",
+                                                // "spoofing","counterfeit","troll","man-in-the-middle","key-farming","exfiltrate","dirty",
+                                                // "wormhole","detour","crack","debug","sabotage","vulnerability","debugger","manipulate",
+                                                // "bypass","clueless","idiot","jerk","dummy","loser","screwup","worthless","pathetic",
+                                                // "useless","weakling","trash","simpleton","moron","fool","disaster","failure","hopeless",
+                                                // "insignificant","worthless","silly","imbecile","disappointing","helpless","dumbass","twit",
+                                                // "brainless","loser","incompetent","blunder","failure","pathetic","stupidity","ignorant",
                                                 "shit","damn","ass","bitch","crap","pissed","dick","hell","twat","fuck" };
 
 
