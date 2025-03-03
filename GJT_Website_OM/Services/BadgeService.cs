@@ -12,7 +12,7 @@
                 "platinum" => "/images/platinum.png",
                 "master" => "/images/master.png",
                 "allstar" => "/images/allstar.png",
-                _ => "/images/default.png" // Default image if none match
+                _ => "/images/default.png" // default image
             };
         }
     }

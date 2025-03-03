@@ -75,7 +75,7 @@
         // Check if the user already has the Allstar badge
         bool hasAllstarBadge = certificates.Any(c => c.Topic == "Allstar Completion");
 
-        // Check if the user has a Level 4 (Master) badge in all required subjects
+        // Check if the user has a Level 4 badge in all required subjects
         bool hasMaths = certificates.Any(c => c.BadgeLevel == "Master" && c.Topic == "Maths");
         bool hasPhysics = certificates.Any(c => c.BadgeLevel == "Master" && c.Topic == "Physics");
         bool hasComputing = certificates.Any(c => c.BadgeLevel == "Master" && c.Topic == "Computing");
