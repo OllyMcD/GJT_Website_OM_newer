@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="appsettings.Development.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Components\Pages\Exercises.razor~RF567b8671.TMP" />
   </ItemGroup>
 

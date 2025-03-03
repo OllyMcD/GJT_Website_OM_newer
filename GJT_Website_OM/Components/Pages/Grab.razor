@@ -7,6 +7,19 @@
 <br />
 <br />
 
+<MudContainer Class="d-flex justify-center align-center" Style="flex-direction: column;">
+
+    <MudButton OnClick="PlayAudio" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large">
+        🎵 Go Back To Quiz
+    </MudButton>
+
+    <audio id="myAudio" src="sounds/Troll.mp3"></audio>
+
+</MudContainer>
+
+<br />
+<br />
+
 <MudContainer>
     <MudPaper Class="pa-4">
         <h3 class="centered-heading">It's Not Fun To Cheat!</h3>
@@ -261,6 +274,11 @@
     {
         var ipAddress = HttpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
         return ipAddress;
+    }
+
+    private async Task PlayAudio()
+    {
+        await JSRuntime.InvokeVoidAsync("playAudio");
     }
 
     private string GetSessionId()
